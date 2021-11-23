@@ -1,37 +1,31 @@
 // Create WebSocket connection.
 const socket = new WebSocket('ws://localhost:3000');
 
-socket.onopen = () => {
-    socket.send('Message From Client') 
-}
-
-socket.onerror = (error) => {
-    socket.log(`WebSocket error: ${error}`)
-}
-
-socket.onmessage = (e) => {
-    console.log(e.data)
-    var dataMachines = JSON.parse(e.data);
-    console.log(dataMachines);
-    createInitTable(dataMachines);
-}
-
-// Listen for messages
-/* socket.addEventListener('message', function (event) {
-    var dataMachines = JSON.parse(event.data);
-    console.log(dataMachines);
-    createInitTable(dataMachines);
-
-    function refresh() {
-        $('table').load('index.html table');
+$(document).ready(function () {
+    socket.onopen = () => {
+        socket.send('Message From Client') 
     }
-}); */
 
-function createInitTable(dataMachines) {
-    $('#A').text(dataMachines[0]._name);
-    $('#AState').text(dataMachines[0]._state);
-    $('#B').text(dataMachines[1]._name);
-    $('#BState').text(dataMachines[1]._state);
-    $('#C').text(dataMachines[2]._name);
-    $('#CState').text(dataMachines[2]._state);
-};
+    socket.onerror = (error) => {
+        socket.log(`WebSocket error: ${error}`)
+    }
+
+    socket.onmessage = (e) => {
+        var dataMachines = JSON.parse(e.data);
+        createInitTable(dataMachines); //
+        console.log(dataMachines); //confirm message is being recieved
+    }
+
+    function createInitTable(dataMachines) {
+        var name = dataMachines.name
+        var newName = name.replace(' ', '_');
+        $('#' + newName + ' td:last').text(dataMachines.state);
+        if (dataMachines.state === 'PRODUCING') {
+            $('#' + newName + ' td:last').css("background-color", "green");
+        } else if (dataMachines.state === 'STARVED') {
+            $('#' + newName + ' td:last').css("background-color", "red");
+        } else {
+            $('#' + newName + ' td:last').css("background-color", "yellow");
+        }
+    };
+});
