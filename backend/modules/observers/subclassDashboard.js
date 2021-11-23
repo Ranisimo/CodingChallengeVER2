@@ -7,7 +7,13 @@ class Dashboard extends Observer {
 
     update(...args) {
         [...args].forEach((arg) => {
-            console.log(this._name, arg._name, arg._state);
+            let argName = arg._name;
+            let argState = arg._state;
+            let obj = {name: argName, state: argState};
+            wss.clients.forEach(function each(ws) {
+                ws.send(JSON.stringify(obj));
+                console.log(obj);
+            })
         });
     }
 };
