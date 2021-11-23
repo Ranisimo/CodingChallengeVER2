@@ -1,3 +1,4 @@
+const { WSAEWOULDBLOCK } = require('constants');
 const express = require('express');
 const { setInterval } = require('timers/promises');
 const app = express();
@@ -9,20 +10,19 @@ function heartbeat() {
   this.isAlive = true;
 }
 
-const wss = new WebSocket.Server({ server:server });
-
+wss = new WebSocket.Server({ server:server });
 
 wss.on('connection', function connection(ws) {
+  ws.isAlive = true;
+  ws.on('pong', heartbeat);
   ws.on('message', message => {
     console.log(`Received message => ${message}`);
     lib.init();
-    ws.send(JSON.stringify(lib.machines));
-    setInterval(() => {
-      ws.send(JSON.stringify(lib.machines));
-    }, 10000);
+
   })
-  ws.isAlive = true;
-  ws.on('pong', heartbeat);
+  ws.on('update', message => {
+    ws.send('Updated');
+  })
 });
 
 const interval = setInterval(function ping() {
