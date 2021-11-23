@@ -1,0 +1,22 @@
+{
+  "name": "codingchallengever2",
+  "version": "1.0.0",
+  "description": "SONY UK - Kizzy Sinar",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "CodingChallengeVER2"
+  },
+  "author": "Kizzy Sinar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "jquery": "^3.6.0",
+    "node": "^17.1.0",
+    "ws": "^8.2.3"
+  }
+}
