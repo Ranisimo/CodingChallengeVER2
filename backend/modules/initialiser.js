@@ -18,7 +18,6 @@ function init() {
 
     setInterval(function(){
         stateChanger(...machines);
-        console.log(machines);
     }, 10000);
 }
 
