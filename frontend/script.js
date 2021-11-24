@@ -1,22 +1,26 @@
-// Create WebSocket connection.
-const socket = new WebSocket('ws://localhost:3000');
+// Establishing WebSocket connection
+const client = new WebSocket('ws://localhost:3000');
 
 $(document).ready(function () {
-    socket.onopen = () => {
-        socket.send('Message From Client') 
-    }
 
-    socket.onerror = (error) => {
-        socket.log(`WebSocket error: ${error}`)
-    }
+    client.onopen = () => {
+        client.send('Message From Client');
+    };
 
-    socket.onmessage = (e) => {
+    client.onerror = (error) => {
+        client.log(`WebSocket error: ${error}`)
+    };
+
+    client.onmessage = (e) => {
         var dataMachines = JSON.parse(e.data);
-        createInitTable(dataMachines); //
-        console.log(dataMachines); //confirm message is being recieved
-    }
+        createInitTable(dataMachines);
+    };
 
-    function createInitTable(dataMachines) {
+    client.onclose = function(e) {
+        console.log("WebSocket is closed now.");
+    };
+
+    function createInitTable(dataMachines) { // Takes JSON data sent and uses the '_name' key to match with the <tr> id and then edit the last <td>
         var name = dataMachines.name
         var newName = name.replace(' ', '_');
         $('#' + newName + ' td:last').text(dataMachines.state);
